@@ -223,7 +223,7 @@ inline void UnserializeTransaction(TxType& tx, Stream& s) {
     }
     if (flags) {
         /* Unknown flag in the serialization */
-        throw std::ios_base::failure("Unknown transaction optional data");
+       // throw std::ios_base::failure("Unknown transaction optional data");
     }
     s >> tx.nLockTime;
 }

@@ -532,17 +532,19 @@ bool ParseDouble(const std::string& str, double *out)
         return false;
     if (str.size() >= 2 && str[0] == '0' && str[1] == 'x') // No hexadecimal floats allowed
         return false;
-    std::istringstream text(str);
-    text.imbue(std::locale::classic());
-    double result;
-    text >> result;
-    if(out) *out = result;
-    return text.eof() && !text.fail();
+    //std::istringstream text(str);
+    // text.imbue(std::locale::classic());
+    // double result;
+    // text >> result;
+    // if(out) *out = result;
+    // return text.eof() && !text.fail();
+    *out = atof(str.c_str());
+    return true;
 }
 
 std::string FormatParagraph(const std::string& in, size_t width, size_t indent)
 {
-    std::stringstream out;
+    std::string out = "";
     size_t ptr = 0;
     size_t indented = 0;
     while (ptr < in.size())
@@ -554,7 +556,7 @@ std::string FormatParagraph(const std::string& in, size_t width, size_t indent)
         const size_t linelen = lineend - ptr;
         const size_t rem_width = width - indented;
         if (linelen <= rem_width) {
-            out << in.substr(ptr, linelen + 1);
+            out +=  in.substr(ptr, linelen + 1);
             ptr = lineend + 1;
             indented = 0;
         } else {
@@ -564,31 +566,31 @@ std::string FormatParagraph(const std::string& in, size_t width, size_t indent)
                 finalspace = in.find_first_of("\n ", ptr);
                 if (finalspace == std::string::npos) {
                     // End of the string, just add it and break
-                    out << in.substr(ptr);
+                    out += in.substr(ptr);
                     break;
                 }
             }
-            out << in.substr(ptr, finalspace - ptr) << "\n";
+            out += in.substr(ptr, finalspace - ptr) + "\n";
             if (in[finalspace] == '\n') {
                 indented = 0;
             } else if (indent) {
-                out << std::string(indent, ' ');
+                out += std::string(indent, ' ');
                 indented = indent;
             }
             ptr = finalspace + 1;
         }
     }
-    return out.str();
+    return out;
 }
 
 std::string i64tostr(int64_t n)
 {
-    return strprintf("%d", n);
+    return std::to_string(n);
 }
 
 std::string itostr(int n)
 {
-    return strprintf("%d", n);
+    return std::to_string(n);
 }
 
 int64_t atoi64(const char* psz)

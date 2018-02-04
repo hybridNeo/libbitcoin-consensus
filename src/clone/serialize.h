@@ -69,17 +69,17 @@ template<typename Stream> inline void ser_writedata8(Stream &s, uint8_t obj)
 }
 template<typename Stream> inline void ser_writedata16(Stream &s, uint16_t obj)
 {
-    obj = htole16(obj);
+    //obj = htole16(obj);
     s.write((char*)&obj, 2);
 }
 template<typename Stream> inline void ser_writedata32(Stream &s, uint32_t obj)
 {
-    obj = htole32(obj);
+    //obj = htole32(obj);
     s.write((char*)&obj, 4);
 }
 template<typename Stream> inline void ser_writedata64(Stream &s, uint64_t obj)
 {
-    obj = htole64(obj);
+    //obj = htole64(obj);
     s.write((char*)&obj, 8);
 }
 template<typename Stream> inline uint8_t ser_readdata8(Stream &s)
@@ -253,23 +253,23 @@ uint64_t ReadCompactSize(Stream& is)
     else if (chSize == 253)
     {
         nSizeRet = ser_readdata16(is);
-        if (nSizeRet < 253)
-            throw std::ios_base::failure("non-canonical ReadCompactSize()");
+        // if (nSizeRet < 253)
+        //     throw std::ios_base::failure("non-canonical ReadCompactSize()");
     }
     else if (chSize == 254)
     {
         nSizeRet = ser_readdata32(is);
-        if (nSizeRet < 0x10000u)
-            throw std::ios_base::failure("non-canonical ReadCompactSize()");
+        // if (nSizeRet < 0x10000u)
+        //     throw std::ios_base::failure("non-canonical ReadCompactSize()");
     }
     else
     {
         nSizeRet = ser_readdata64(is);
-        if (nSizeRet < 0x100000000ULL)
-            throw std::ios_base::failure("non-canonical ReadCompactSize()");
+        // if (nSizeRet < 0x100000000ULL)
+        //     throw std::ios_base::failure("non-canonical ReadCompactSize()");
     }
-    if (nSizeRet > (uint64_t)MAX_SIZE)
-        throw std::ios_base::failure("ReadCompactSize(): size too large");
+    // if (nSizeRet > (uint64_t)MAX_SIZE)
+    //     throw std::ios_base::failure("ReadCompactSize(): size too large");
     return nSizeRet;
 }
 
@@ -336,14 +336,14 @@ I ReadVarInt(Stream& is)
     I n = 0;
     while(true) {
         unsigned char chData = ser_readdata8(is);
-        if (n > (std::numeric_limits<I>::max() >> 7)) {
-           throw std::ios_base::failure("ReadVarInt(): size too large");
-        }
+        // if (n > (std::numeric_limits<I>::max() >> 7)) {
+        //    throw std::ios_base::failure("ReadVarInt(): size too large");
+        // }
         n = (n << 7) | (chData & 0x7F);
         if (chData & 0x80) {
-            if (n == std::numeric_limits<I>::max()) {
-                throw std::ios_base::failure("ReadVarInt(): size too large");
-            }
+            // if (n == std::numeric_limits<I>::max()) {
+            //     throw std::ios_base::failure("ReadVarInt(): size too large");
+            // }
             n++;
         } else {
             return n;
@@ -445,9 +445,9 @@ public:
     void Unserialize(Stream& s)
     {
         size_t size = ReadCompactSize(s);
-        if (size > Limit) {
-            throw std::ios_base::failure("String length limit exceeded");
-        }
+        // if (size > Limit) {
+        //     throw std::ios_base::failure("String length limit exceeded");
+        // }
         string.resize(size);
         if (size != 0)
             s.read((char*)string.data(), size);

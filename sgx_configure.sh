@@ -1,0 +1,2 @@
+PKG_CONFIG_PATH=$PKG_CONFIG_PATH:./../secp256k1/
+

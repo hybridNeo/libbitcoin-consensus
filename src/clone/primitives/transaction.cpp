@@ -11,7 +11,7 @@
 
 std::string COutPoint::ToString() const
 {
-    return strprintf("COutPoint(%s, %u)", hash.ToString().substr(0,10), n);
+    return "COutPoint("+ hash.ToString().substr(0,10) + ", "+ std::to_string(n) + ")";
 }
 
 CTxIn::CTxIn(COutPoint prevoutIn, CScript scriptSigIn, uint32_t nSequenceIn)
@@ -34,11 +34,11 @@ std::string CTxIn::ToString() const
     str += "CTxIn(";
     str += prevout.ToString();
     if (prevout.IsNull())
-        str += strprintf(", coinbase %s", HexStr(scriptSig));
+        str += ", coinbase" +  HexStr(scriptSig);
     else
-        str += strprintf(", scriptSig=%s", HexStr(scriptSig).substr(0, 24));
+        str += ", scriptSig=", HexStr(scriptSig).substr(0, 24);
     if (nSequence != SEQUENCE_FINAL)
-        str += strprintf(", nSequence=%u", nSequence);
+        str += ", nSequence=" + nSequence;
     str += ")";
     return str;
 }
@@ -51,7 +51,7 @@ CTxOut::CTxOut(const CAmount& nValueIn, CScript scriptPubKeyIn)
 
 std::string CTxOut::ToString() const
 {
-    return strprintf("CTxOut(nValue=%d.%08d, scriptPubKey=%s)", nValue / COIN, nValue % COIN, HexStr(scriptPubKey).substr(0, 30));
+    return "CTxOut(nValue=" + std::to_string( nValue / COIN )  + std::to_string( nValue % COIN ) +  " scriptPubKey=" +  HexStr(scriptPubKey).substr(0, 30) + ")";
 }
 
 CMutableTransaction::CMutableTransaction() : nVersion(CTransaction::CURRENT_VERSION), nLockTime(0) {}
@@ -97,14 +97,9 @@ unsigned int CTransaction::GetTotalSize() const
 }
 
 std::string CTransaction::ToString() const
-{
+{ 
     std::string str;
-    str += strprintf("CTransaction(hash=%s, ver=%d, vin.size=%u, vout.size=%u, nLockTime=%u)\n",
-        GetHash().ToString().substr(0,10),
-        nVersion,
-        vin.size(),
-        vout.size(),
-        nLockTime);
+    str += "CTransaction(hash= " + GetHash().ToString().substr(0,10) +  " , ver= "  + std::to_string(nVersion) +  " , vin.size=" + std::to_string(vin.size()) + " , vout.size=" + std::to_string(vout.size() )+  " , nLockTime= "  + std::to_string( nLockTime )+ ")\n" ;
     for (const auto& tx_in : vin)
         str += "    " + tx_in.ToString() + "\n";
     for (const auto& tx_in : vin)
