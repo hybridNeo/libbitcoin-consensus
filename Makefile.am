@@ -32,7 +32,7 @@ doc_DATA = \
 # src/libbitcoin-consensus.la => ${libdir}
 #------------------------------------------------------------------------------
 lib_LTLIBRARIES = src/libbitcoin-consensus.la
-src_libbitcoin_consensus_la_CPPFLAGS = -I${srcdir}/include -I${srcdir}/src -I${srcdir}/src/clone ${secp256k1_CPPFLAGS} -I../secp256k1/include
+src_libbitcoin_consensus_la_CPPFLAGS =  -I${srcdir}/include -I${srcdir}/src -I${srcdir}/src/clone ${secp256k1_CPPFLAGS} -I./../secp256k1/include -I$(SGX_SDK)/include -I$(SGX_SDK)/include/tlibc -I$(SGX_SDK)/include/libcxx
 src_libbitcoin_consensus_la_LIBADD = ${secp256k1_LIBS}
 src_libbitcoin_consensus_la_SOURCES = \
     src/clone/amount.h \
