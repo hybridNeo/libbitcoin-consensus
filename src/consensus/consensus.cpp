@@ -57,8 +57,8 @@ public:
 
     void read(char* destination, size_t size)
     {
-        if (size > remaining_)
-            throw std::ios_base::failure("end of data");
+        // if (size > remaining_)
+        //     throw std::ios_base::failure("end of data");
 
         memcpy(destination, source_, size);
         remaining_ -= size;
